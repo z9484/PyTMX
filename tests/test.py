@@ -63,15 +63,15 @@ def simpleTest(filename):
     screen.blit(i, (0,0))
     pygame.display.flip()
 
-    print "Objects in map:"
+    print("Objects in map:")
     for o in formosa.tiledmap.getObjects():
-        print o
+        print(o)
         for k, v in o.__dict__.items():
-            print "  ", k, v
+            print("  ", k, v)
 
-    print "GID (tile) properties:"
+    print("GID (tile) properties:")
     for k, v in formosa.tiledmap.tile_properties.items():
-        print "  ", k, v
+        print("  ", k, v)
 
     run = True
     while run:
@@ -84,7 +84,7 @@ def simpleTest(filename):
 
 
 for filename in glob.glob('*.tmx'):
-    print "testing", filename
+    print("testing", filename)
     simpleTest(filename)
 
 pygame.quit()

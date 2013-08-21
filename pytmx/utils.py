@@ -1,7 +1,7 @@
 from pygame import Rect
-from itertools import tee, islice, izip, product
+from itertools import tee, islice, product
 from collections import defaultdict
-from constants import *
+from .constants import *
 
 
 
@@ -63,7 +63,7 @@ def handle_bool(text):
     except:
         pass
 
-    raise ValueError
+    raise(ValueError)
 
 
 # used to change the unicode string returned from xml to proper python
@@ -100,12 +100,12 @@ def pairwise(iterable):
     # return a list as a sequence of pairs
     a, b = tee(iterable)
     next(b, None)
-    return izip(a, b)
+    return zip(a, b)
 
 
 def group(l, n):
     # return a list as a sequence of n tuples
-    return izip(*(islice(l, i, None, n) for i in xrange(n)))
+    return zip(*(islice(l, i, None, n) for i in range(n)))
 
 
 def buildDistributionRects(tmxmap, layer, tileset=None, real_gid=None):
@@ -121,18 +121,18 @@ def buildDistributionRects(tmxmap, layer, tileset=None, real_gid=None):
             tileset = tmxmap.tilesets[tileset]
         except IndexError:
             msg = "Tileset #{0} not found in map {1}."
-            raise IndexError, msg.format(tileset, tmxmap)
+            raise(IndexError, msg.format(tileset, tmxmap))
 
     elif isinstance(tileset, str):
         try:
             tileset = [ t for t in tmxmap.tilesets if t.name == tileset ].pop()
         except IndexError:
             msg = "Tileset \"{0}\" not found in map {1}."
-            raise ValueError, msg.format(tileset, tmxmap)
+            raise(ValueError, msg.format(tileset, tmxmap))
 
     elif tileset:
         msg = "Tileset must be either a int or string. got: {0}"
-        raise ValueError, msg.format(type(tileset))
+        raise(ValueError, msg.format(type(tileset)))
 
     gid = None
     if real_gid:
@@ -140,7 +140,7 @@ def buildDistributionRects(tmxmap, layer, tileset=None, real_gid=None):
             gid, flags = tmxmap.mapGID(real_gid)[0]
         except IndexError:
             msg = "GID #{0} not found"
-            raise ValueError, msg.format(real_gid)
+            raise(ValueError, msg.format(real_gid))
 
 
     if isinstance(layer, int):
@@ -151,9 +151,9 @@ def buildDistributionRects(tmxmap, layer, tileset=None, real_gid=None):
             layer_data = layer.data
         except IndexError:
             msg = "Layer \"{0}\" not found in map {1}."
-            raise ValueError, msg.format(layer, tmxmap)
+            raise(ValueError, msg.format(layer, tmxmap))
 
-    p = product(xrange(tmxmap.width), xrange(tmxmap.height))
+    p = product(range(tmxmap.width), range(tmxmap.height))
     if gid:
         points = [ (x,y) for (x,y) in p if layer_data[y][x] == gid ]
     else:

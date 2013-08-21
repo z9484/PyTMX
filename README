@@ -1,9 +1,14 @@
 Map loader for TMX Files
+
+Python 3 fork of PyTMX 
+by Z9484
+
+
+########################
+Original Author
+
 bitcraft (leif dot theden at gmail.com)
 v.15 - for python 2.6 and 2.7
-
-If you have any problems or suggestions, please contact me via email.
-Tested with Tiled 0.8.1 for Mac.
 
 released under the LGPL v3
 
@@ -42,7 +47,7 @@ Why use PyTMX?
         Supports all major Tiled features and object types
         PyTMX data classes can be subclassed and extended
         Has built-in pygame tile loading
-	Does not force you to render data in any particular way
+    Does not force you to render data in any particular way
 
     PyTMX is supported:
         GitHub hosting allows for community participation

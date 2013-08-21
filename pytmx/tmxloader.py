@@ -1,10 +1,14 @@
 """
 Map loader for TMX Files
+
+Python 3 fork of PyTMX 
+by Z9484
+
+########################
+Original Author
+
 bitcraft (leif dot theden at gmail.com)
 v.15 - for python 2.6 and 2.7
-
-If you have any problems or suggestions, please contact me via email.
-Tested with Tiled 0.8.1 for Mac.
 
 released under the LGPL v3
 
@@ -36,6 +40,10 @@ Features:
     Automatic flipping and rotation of tiles
     Supports base64, csv, gzip, zlib and uncompressed XML
     Image loading with pygame
+
+Edits by Z9484:
+    Ported to Python3
+    Switched maxium gids per layer to 65536
 
 New in .15:
     loader: new getTileLayerByName(name) method
@@ -173,14 +181,14 @@ object:     name, type, x, y, width, height, gid, properties, polygon,
 Please see the TiledMap class for more api information.
 """
 from pygame import Surface, mask, RLEACCEL
-from utils import types
-from constants import *
+from .utils import types
+from .constants import *
 
 
 
 def load_tmx(filename, *args, **kwargs):
     # for .14 compatibility
-    from pytmx import TiledMap
+    from .pytmx import TiledMap
 
     tiledmap = TiledMap(filename)
     return tiledmap
@@ -296,7 +304,7 @@ def load_images_pygame(tmxdata, mapping, *args, **kwargs):
             force_colorkey = pygame.Color(*force_colorkey)
         except:
             msg = "Cannot understand color: {0}"
-            raise Exception, msg.format(force_colorkey)
+            raise(Exception, msg.format(force_colorkey))
 
     tmxdata.images = [0] * tmxdata.maxgid
 
@@ -320,12 +328,12 @@ def load_images_pygame(tmxdata, mapping, *args, **kwargs):
 
         # some tileset images may be slightly larger than the tile area
         # ie: may include a banner, copyright, ect.  this compensates for that
-        width = ((int((w-t.margin*2) + t.spacing) / tilewidth) * tilewidth) - t.spacing
-        height = ((int((h-t.margin*2) + t.spacing) / tileheight) * tileheight) - t.spacing
+        width = ((int((w-t.margin*2) + t.spacing) // tilewidth) * tilewidth) - t.spacing
+        height = ((int((h-t.margin*2) + t.spacing) // tileheight) * tileheight) - t.spacing
 
         # using product avoids the overhead of nested loops
-        p = product(xrange(t.margin, height+t.margin, tileheight),
-                    xrange(t.margin, width+t.margin, tilewidth))
+        p = product(range(t.margin, height+t.margin, tileheight),
+                    range(t.margin, width+t.margin, tilewidth))
 
         for (y, x) in p:
             real_gid += 1

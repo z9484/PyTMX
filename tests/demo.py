@@ -1,7 +1,5 @@
 """
-This is tested on pygame 1.9 and python 2.7.
-This will not work on python 3.  Don't ask either.  I will say 'no'.
-bitcraft (leif dot theden at gmail.com)
+This is tested on pygame 1.9 and python 2.7. and python 3.3
 
 Rendering demo for the TMXLoader.  This simply shows that the loader works.
 If you need a rendering library that will handle large maps and scrolling, you
@@ -35,9 +33,9 @@ class TiledRenderer(object):
         th = self.tiledmap.tileheight
         gt = self.tiledmap.getTileImage
 
-        for l in xrange(0, len(self.tiledmap.tilelayers)):
-            for y in xrange(0, self.tiledmap.height):
-                for x in xrange(0, self.tiledmap.width):
+        for l in range(0, len(self.tiledmap.tilelayers)):
+            for y in range(0, self.tiledmap.height):
+                for x in range(0, self.tiledmap.width):
                     tile = gt(x, y, l)
                     if tile: surface.blit(tile, (x*tw, y*th))
 
@@ -62,11 +60,11 @@ class ScrollingRenderer(TiledRenderer):
         self.mapwidth = self.tiledmap.width
         self.mapheight = self.tiledmap.height
 
-        self.halfwidth = self.tiledmap.width / 2
-        self.halfheight = self.tiledmap.height / 2 + 1
+        self.halfwidth = self.tiledmap.width // 2
+        self.halfheight = self.tiledmap.height // 2 + 1
 
 
-    def render(self, surface, (cx, cy)):
+    def render(self, surface, args):
         sw, sh = surface.get_size()
         tw = self.tiledmap.tilewidth
         th = self.tiledmap.tileheight
@@ -75,14 +73,14 @@ class ScrollingRenderer(TiledRenderer):
         stw = int(math.ceil(float(sw) / tw)) + 1
         sth = int(math.ceil(float(sh) / th)) + 1
 
-        txf, pxf = divmod((cx-sw/2), tw)
-        tyf, pyf = divmod((cy-sh/2), th)
+        txf, pxf = divmod((args[0]-sw//2), tw)
+        tyf, pyf = divmod((args[1]-sh//2), th)
 
         if stw + txf > self.mapwidth: stw -= 1
         if sth + tyf > self.mapheight: sth -= 1
 
-        p = product(xrange(stw), xrange(sth),
-                    xrange(len(self.tiledmap.tilelayers)))
+        p = product(range(stw), range(sth),
+                    range(len(self.tiledmap.tilelayers)))
 
         for x, y, l in p:
             tile = gt(x+txf, y+tyf, l)
@@ -124,8 +122,8 @@ def simpleTest(filename):
 
 
 def scrollTest(filename):
-    buf_dim = [screen.get_width() / 2, screen.get_height() / 2]
-    center = [buf_dim[0]/2, buf_dim[1]/2]
+    buf_dim = [screen.get_width() // 2, screen.get_height() // 2]
+    center = [buf_dim[0]//2, buf_dim[1]//2]
     movt = [0, 0, 0]
 
     clock = pygame.time.Clock()
@@ -189,14 +187,14 @@ def scrollTest(filename):
                 if (buf_dim[0] < 1) or (buf_dim[1] < 0):
                     buf_dim[0] += 1 - buf_dim[0]
                     buf_dim[1] += 1 - buf_dim[1]
-                if buf_dim[0] > screen.get_width() / 2:
-                    buf_dim = [screen.get_width() / 2, screen.get_height() / 2]
+                if buf_dim[0] > screen.get_width() // 2:
+                    buf_dim = [screen.get_width() // 2, screen.get_height() // 2]
                     movt[2] = 0
                 screen_buf = pygame.Surface(buf_dim)
 
             sw, sh = screen_buf.get_size()
-            hsw = sw / 2
-            hsh = sh / 2
+            hsw = sw // 2
+            hsh = sh // 2
 
             if formosa.width > sw:
                 if center[0] < hsw:
@@ -206,7 +204,7 @@ def scrollTest(filename):
                     center[0] = mw - hsw-1
                     movt[0] = 0
             else:
-                center[0] = formosa.width / 2
+                center[0] = formosa.width // 2
 
             if formosa.height > sh:
                 if center[1] < hsh:
@@ -216,7 +214,7 @@ def scrollTest(filename):
                     center[1] = mh - hsh - 1
                     movt[1] = 0
             else:
-                center[1] = formosa.height / 2
+                center[1] = formosa.height // 2
 
             draw()
             pygame.display.flip()
@@ -231,7 +229,7 @@ if __name__ == "__main__":
     try:
         filename = sys.argv[1]
     except:
-        print "no TMX map specified, using default"
+        print("no TMX map specified, using default")
         filename = "formosa-base64-gzip.tmx"
 
     simpleTest(filename)
