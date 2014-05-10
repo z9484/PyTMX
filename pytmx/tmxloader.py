@@ -338,7 +338,7 @@ def load_images_pygame(tmxdata, mapping, *args, **kwargs):
         for (y, x) in p:
             real_gid += 1
             gids = tmxdata.mapGID(real_gid)
-            if gids == []: continue
+            if not gids: continue
 
             original = image.subsurface(((x,y), tile_size))
 
